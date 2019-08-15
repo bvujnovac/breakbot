@@ -30,21 +30,10 @@ class TopicReadPlugin(MachineBasePlugin):
     @respond_to(r'^(?P<agent_alert>chats|seconds|tickets|ping)')
     def listen_to_agent_alert(self, msg, agent_alert):
         print(global_event['channel'])
-        logger.debug("Used keyword: %s", agent_alert)
         get_chanel_topic = msg.getTopic(global_event['channel'])
-
-        '''
-        try:
-            get_chanel_topic['channel']['topic']['value']
-        except:
-            get_agents = get_chanel_topic['group']['topic']['value']
-        else:
-            get_agents = get_chanel_topic['channel']['topic']['value']
-        '''
 
         get_agents = get_chanel_topic
         print(get_agents)
-        logger.debug("Recieved all: %s", get_agents)
         searching = re.compile('(?:chats:)(.*)(?:seconds:)(.*)(?:tickets:)(.*)|(?:chats:)(.*)(?:seconds:)(.*)|(?:chats:)(.*)(?:tickets:)(.*)|(?:seconds:)(.*)(?:tickets:)(.*)|(?:chats:)(.*)|(?:seconds:)(.*)|(?:tickets:)(.*)')
         result = searching.search(get_agents)
         if result:
