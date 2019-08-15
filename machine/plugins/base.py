@@ -386,29 +386,6 @@ class Message:
         )
 
 ############### my methods #######################
-    def set_channel_webapi(self, text):
-        return self._client.set_channel_topic_webapi(
-        self.channel.id,
-        text,
-        )
-
-    def read_channel_webapi(self):
-        return self._client.read_channel_topic_webapi(
-        self.channel.id,
-        )
-
-    def set_group_webapi(self, text):
-        return self._client.set_group_topic_webapi(
-        self.channel.id,
-        text,
-        )
-
-    def read_group_webapi(self):
-        return self._client.read_group_topic_webapi(
-        self.channel.id,
-        )
-
-
     def getChannelType(self, channel):
         if re.compile(r'^G.+').match(channel):
             return 'group'
@@ -434,13 +411,15 @@ class Message:
         get_channel = channel
         current_channel = self.getChannelType(get_channel)
         if current_channel == 'group':
-            return self._client.read_group_topic_webapi(
+            topic = self._client.read_group_topic_webapi(
             self.channel.id,
             )
+            return topic['group']['topic']['value']
         if current_channel == 'channel':
-            return self._client.read_channel_topic_webapi(
+            topic = self._client.read_channel_topic_webapi(
             self.channel.id,
             )
+            return topic['group']['topic']['value']
 ############# end my methods #######################
     def say_webapi_scheduled(self, when, text, attachments=None, ephemeral=False):
         """Schedule a message and send it using the WebAPI
