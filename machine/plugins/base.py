@@ -415,11 +415,13 @@ class Message:
             self.channel.id,
             )
             return topic['group']['topic']['value']
+#            return topic
         if current_channel == 'channel':
             topic = self._client.read_channel_topic_webapi(
             self.channel.id,
             )
-            return topic['group']['topic']['value']
+            return topic['channel']['topic']['value']
+#            return topic
 ############# end my methods #######################
     def say_webapi_scheduled(self, when, text, attachments=None, ephemeral=False):
         """Schedule a message and send it using the WebAPI
