@@ -3,7 +3,7 @@ from machine.plugins.base import MachineBasePlugin
 from machine.plugins.decorators import listen_to, respond_to, process
 import re
 
-logger = logging.getLogger(__name__)
+#logger = logging.getLogger(__name__)
 def Convert(string):
     li = list(string.split(" "))
     return li
@@ -16,9 +16,24 @@ class TopicSetPlugin(MachineBasePlugin):
         global_event = {}
         global_event['channel'] = event['channel']
 
-    @respond_to(r'^add (?P<topic_string>\D+|\d+)')
+    @respond_to(r'^add (?P<topic_string>\D+|\d+|me)')
     def topics(self, msg, topic_string):
-        msg.setTopic(topic_string, global_event['channel'])
+        if topic_string == 'me':
+            add_me_topic = msg.getTopic(global_event['channel']) + " " + msg.sender.name
+            msg.setTopic(add_me_topic, global_event['channel'])
+        else:
+            msg.setTopic(topic_string, global_event['channel'])
+
+    @respond_to(r'^rm (?P<remove_me>me)')
+    def remove(self, msg, remove_me):
+        if remove_me == 'me':
+            rm_me_topic = msg.getTopic(global_event['channel'])
+            rm_me_user = msg.sender.name
+            remove_me_topic = rm_me_topic.replace(rm_me_user, '')
+            remove_me_topic2 = remove_me_topic.strip()
+            msg.setTopic(remove_me_topic2, global_event['channel'])
+        else:
+            pass
 
 class TopicReadPlugin(MachineBasePlugin):
     @process(slack_event_type='message')
