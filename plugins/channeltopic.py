@@ -60,4 +60,7 @@ class TopicReadPlugin(MachineBasePlugin):
             for user in ping_list:
                 pinging_string += "self.at('" + user + "') + "
             pinging_string = pinging_string.strip(' +')
-            msg.say(eval(pinging_string))
+            try:
+                msg.say(eval(pinging_string))
+            except:
+                msg.say("No valid users to ping...")
