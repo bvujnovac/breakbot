@@ -156,6 +156,9 @@ class MachineBasePlugin:
 
     def read_group_webapi(self, channel):
         return self._client.read_group_topic_webapi(channel)
+
+    def get_scheduled(self):
+        return self._client.scheduled_messages()
 ############### end my methods #######################
 
     def say_webapi_scheduled(self, when, channel, text, attachments, ephemeral_user):
@@ -205,7 +208,7 @@ class MachineBasePlugin:
         """
         self._client.send_dm(user, text)
 
-    def send_dm_scheduled(self, when, user, text):
+    def send_dm_scheduled(self, when, user, text, name):
         """Schedule a Direct Message
 
         This is the scheduled version of
@@ -217,7 +220,7 @@ class MachineBasePlugin:
         :param text: message text
         :return: None
         """
-        self._client.send_dm_scheduled(when, user, text)
+        self._client.send_dm_scheduled(when, user, text, name)
 
     def send_dm_webapi(self, user, text, attachments=None):
         """Send a Direct Message through the WebAPI
@@ -527,7 +530,7 @@ class Message:
         """
         self._client.send_dm(self.sender.id, text)
 
-    def reply_dm_scheduled(self, when, text):
+    def reply_dm_scheduled(self, when, text, name):
         """Schedule a DM reply
 
         This is the scheduled version of :py:meth:`~machine.plugins.base.Message.reply_dm`. It
@@ -537,7 +540,7 @@ class Message:
         :param text: message text
         :return: None
         """
-        self._client.send_dm_scheduled(when, self.sender.id, text)
+        self._client.send_dm_scheduled(when, self.sender.id, text, name)
 
     def reply_dm_webapi(self, text, attachments=None):
         """Reply to the sender of the original message with a DM using the WebAPI

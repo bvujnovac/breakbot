@@ -103,6 +103,25 @@ class MessagingClient:
         method,
         **kwargs
         )
+
+    def scheduled_messages(self):
+        response = Slack.get_instance().api_call(
+            'chat.scheduledMessages.list'
+        )
+
+        return response
+
+#    def scheduled_messages(self, channel):
+#        method = 'chat.scheduledMessages.list'
+#
+#        kwargs = {
+#        'channel': channel
+#        }
+#
+#        return Slack.get_instance().api_call(
+#        method,
+#        **kwargs
+#        )
 ############### end my methods #######################
 
     def send_webapi_scheduled(self, when, channel, text, attachments=None, ephemeral_user=None):
@@ -138,9 +157,9 @@ class MessagingClient:
 
         self.send(dm_channel, text)
 
-    def send_dm_scheduled(self, when, user, text):
+    def send_dm_scheduled(self, when, user, text, name):
         args = [self, user, text]
-        Scheduler.get_instance().add_job(MessagingClient.send_dm, trigger='date', args=args,
+        Scheduler.get_instance().add_job(MessagingClient.send_dm, trigger='date', args=args, name=name,
                                          run_date=when)
 
     def send_dm_webapi(self, user, text, attachments=None):
